@@ -47,6 +47,30 @@
 						<echo message="JUnit test for package '@{testProject}' failed" />
 						<var name="failedTestList" value="${failedTestList}'@{packageName}', " />
 						<property name="testFail" refid="exception_ref" />
+						<!-- Start -->
+						<target name="triggerRollback">
+							<exec executable="${deployerInstallationPath}/Deployer.sh" dir="${deployerInstallationPath}" failonerror="true" resultproperty="appState">
+								<arg value="--rollback"/>
+								<arg line="-dc myDeployment_${buildNumber}"/>
+								<arg line="-project ${projectName}"/>
+								<arg line="-host ${deployerHost}"/>
+								<arg line="-port ${deployerPort}"/>
+								<arg line="-user ${deployerUsername}"/>
+								<arg line="-pwd ${deployerPassword}"/>
+								<arg value="-force"/>
+							</exec>
+							
+							<if>			
+							<equals arg1="${appState}" arg2="0" trim="true"/>			
+								<then>
+									<echo message="Rollback successfull."/>
+								</then>
+								<else>			    				
+									<fail message="Rollback failed failed."/>
+								</else>
+							</if>		
+						</target>
+						<!-- End -->
 					</catch>
 				</trycatch>
 			</sequential>
@@ -60,7 +84,9 @@
 				<equals arg1="${failedTestList}" arg2="" trim="true" />
 			</not>
 			<then>
-				<fail unless="isReportingToJenkins" message="At least one test failed. Failed packages: ${failedTestList}" />
+				<fail unless="isReportingToJenkins" message="At least one test failed. Failed packages: ${failedTestList}">
+
+				</fail>
 			</then>
 			<else>
 				<echo message="All JUnit Tests passed."/>
@@ -77,6 +103,8 @@
 	<target name="junitCleanUp">
 		<delete dir="${testPackageReportsDir}" />								
 	</target>
+
+	
 	
 
 	<!--execute only if the XML Test directory exists in the test package -->
