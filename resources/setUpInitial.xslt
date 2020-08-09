@@ -26,7 +26,8 @@
 	<xsl:param name="deployerPort"/>
 	<xsl:param name="deployerUsername"/>
 	<xsl:param name="deployerPassword"/>
-	
+
+	<xsl:param name="testServer"/>
 	<xsl:param name="testISHost"/>
 	<xsl:param name="testISPort"/>
 	<xsl:param name="testISUsername"/>
@@ -35,6 +36,7 @@
 	<xsl:param name="repoName"/>
 	<xsl:param name="repoPath"/>
 	<xsl:param name="projectName"/>
+	<xsl:param name="buildNumber"/>
 		
 	<xsl:template match="@*|node()">
 		<xsl:copy>
@@ -53,7 +55,8 @@
 	<xsl:template match="DeployerSpec/Environment">
 	    <Environment>
 			<IS>
-				<isalias name="testServer">
+				<isalias>
+					<xsl:attribute name="name"><xsl:value-of select="$testServer"/></xsl:attribute>
 					<host><xsl:value-of select="$testISHost"/></host>
 					<port><xsl:value-of select="$testISPort"/></port>
 					<user><xsl:value-of select="$testISUsername"/></user>
@@ -87,22 +90,32 @@
 		<Projects>
 			<xsl:apply-templates select="@* | *" />
 			
-			<Project description="" ignoreMissingDependencies="true" overwrite="true" type="Repository">
+			<Project description="" ignoreMissingDependencies="false" overwrite="false" type="Repository">
 			<xsl:attribute name="name"><xsl:value-of select="$projectName"/></xsl:attribute>			
-
-				<DeploymentSet autoResolve="full" description="" name="myDeploymentSet">
+				<!-- name="myDeploymentSet" -->
+				<DeploymentSet autoResolve="full" description="myDeploymentSet">
 				<xsl:attribute name="srcAlias"><xsl:value-of select="$repoName"/></xsl:attribute>
+				<xsl:attribute name="name">myDeploymentSet_<xsl:value-of select="$buildNumber"/></xsl:attribute>
 
 					<Composite displayName="" name="*" type="*">
 						<xsl:attribute name="srcAlias"><xsl:value-of select="$repoName"/></xsl:attribute>
-                                        </Composite> 
+                    </Composite> 
 				</DeploymentSet>
-				
-				<DeploymentMap description="" name="myDeploymentMap"/>			
-				<MapSetMapping mapName="myDeploymentMap" setName="myDeploymentSet">								
-					<alias type="IS">testServer</alias>
+				<!-- name="myDeploymentMap" -->
+				<DeploymentMap description="myDeploymentMap">
+					<xsl:attribute name="name">myDeploymentMap_<xsl:value-of select="$buildNumber"/></xsl:attribute>
+				</DeploymentMap>
+				<!--mapName="myDeploymentMap" setName="myDeploymentSet" -->			
+				<MapSetMapping>	
+				<xsl:attribute name="mapName">myDeploymentMap_<xsl:value-of select="$buildNumber"/></xsl:attribute>
+				<xsl:attribute name="setName">myDeploymentSet_<xsl:value-of select="$buildNumber"/></xsl:attribute>							
+					<alias type="IS"><xsl:value-of select="$testServer"/></alias>
 				</MapSetMapping>	
-				<DeploymentCandidate description="" mapName="myDeploymentMap" name="myDeployment"/>
+				<!-- mapName="myDeploymentMap" name="myDeployment" -->
+				<DeploymentCandidate description="myDeployment">
+					<xsl:attribute name="mapName">myDeploymentMap_<xsl:value-of select="$buildNumber"/></xsl:attribute>
+					<xsl:attribute name="name">myDeployment_<xsl:value-of select="$buildNumber"/></xsl:attribute>
+				</DeploymentCandidate>
 			</Project>
 
 		</Projects>		

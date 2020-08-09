@@ -69,6 +69,7 @@
 			<param name="deployerPassword" expression="${deployerPassword}" />
 			
 			<!--target server props -->
+			<param name="testServer" expression="${testServer}" />
 			<param name="testISHost" expression="${testISHost}" />
 			<param name="testISPort" expression="${testISPort}" />
 			<param name="testISUsername" expression="${testISUsername}" />
@@ -77,7 +78,8 @@
 			<!-- general props -->
 			<param name="repoName" expression="${repositoryName}" />
 			<param name="repoPath" expression="${buildOutputDir}" />
-			<param name="projectName" expression="${projectName}" />				
+			<param name="projectName" expression="${projectName}" />
+			<param name="buildNumber" expression="${buildNumber}" />				
 		</xslt>				
 	</target>
 	
@@ -108,12 +110,14 @@
 		<exec executable="${deployerInstallationPath}/${deployerExecutable}" dir="${deployerInstallationPath}" failonerror="true" resultproperty="appState">
 			<arg value="--deploy"/>
 			<arg line="-project ${projectName}"/>
-			<arg line="-dc myDeployment"/>
+			<arg line="-dc myDeployment_${buildNumber}"/>
 			<arg line="-host ${deployerHost}"/>
 			<arg line="-port ${deployerPort}"/>
 			<arg line="-user ${deployerUsername}"/>
 			<arg line="-pwd ${deployerPassword}"/>
-			<arg value="-force"/>
+			<!--
+				<arg value="-force"/>
+			-->
 		</exec>
 		
 		<if>			
