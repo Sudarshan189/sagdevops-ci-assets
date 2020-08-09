@@ -110,11 +110,12 @@
 		<exec executable="${deployerInstallationPath}/${deployerExecutable}" dir="${deployerInstallationPath}" failonerror="true" resultproperty="appState">
 			<arg value="--deploy"/>
 			<arg line="-project ${projectName}"/>
-			<arg line="-dc myDeployment"/>
+			<arg line="-dc myDeployment_${buildNumber}"/>
 			<arg line="-host ${deployerHost}"/>
 			<arg line="-port ${deployerPort}"/>
 			<arg line="-user ${deployerUsername}"/>
 			<arg line="-pwd ${deployerPassword}"/>
+			<arg line="-checkpoint true"/>
 			<!--
 				<arg value="-force"/>
 			-->
