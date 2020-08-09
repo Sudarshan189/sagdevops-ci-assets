@@ -95,7 +95,7 @@
 				<!-- name="myDeploymentSet" -->
 				<DeploymentSet autoResolve="full" description="myDeploymentSet">
 				<xsl:attribute name="srcAlias"><xsl:value-of select="$repoName"/></xsl:attribute>
-				<xsl:attribute name="name">myDeploymentSet_<xsl:value-of select="$buildNumber"/></xsl:attribute>
+				<xsl:attribute name="name">myDeploymentSet</xsl:attribute>
 
 					<Composite displayName="" name="*" type="*">
 						<xsl:attribute name="srcAlias"><xsl:value-of select="$repoName"/></xsl:attribute>
@@ -103,18 +103,18 @@
 				</DeploymentSet>
 				<!-- name="myDeploymentMap" -->
 				<DeploymentMap description="myDeploymentMap">
-					<xsl:attribute name="name">myDeploymentMap_<xsl:value-of select="$buildNumber"/></xsl:attribute>
+					<xsl:attribute name="name">myDeploymentMap</xsl:attribute>
 				</DeploymentMap>
 				<!--mapName="myDeploymentMap" setName="myDeploymentSet" -->			
 				<MapSetMapping>	
-				<xsl:attribute name="mapName">myDeploymentMap_<xsl:value-of select="$buildNumber"/></xsl:attribute>
-				<xsl:attribute name="setName">myDeploymentSet_<xsl:value-of select="$buildNumber"/></xsl:attribute>							
+				<xsl:attribute name="mapName">myDeploymentMap</xsl:attribute>
+				<xsl:attribute name="setName">myDeploymentSet</xsl:attribute>							
 					<alias type="IS"><xsl:value-of select="$testServer"/></alias>
 				</MapSetMapping>	
 				<!-- mapName="myDeploymentMap" name="myDeployment" -->
 				<DeploymentCandidate description="myDeployment">
-					<xsl:attribute name="mapName">myDeploymentMap_<xsl:value-of select="$buildNumber"/></xsl:attribute>
-					<xsl:attribute name="name">myDeployment_<xsl:value-of select="$buildNumber"/></xsl:attribute>
+					<xsl:attribute name="mapName">myDeploymentMap</xsl:attribute>
+					<xsl:attribute name="name">myDeployment</xsl:attribute>
 				</DeploymentCandidate>
 			</Project>
 
