@@ -45,8 +45,7 @@
 					</try>
 					<catch>
 						<echo message="JUnit test for package '@{testProject}' failed" />
-						<var name="failedTestList" value="${failedTestList}'@{packageName}', " />
-						<property name="testFail" refid="exception_ref" />
+						<echo message="${deployerInstallationPath}/Deployer.sh ${deployerInstallationPath}" />
 						<!-- Start -->
 						<target name="triggerRollback">
 							<exec executable="${deployerInstallationPath}/Deployer.sh" dir="${deployerInstallationPath}" failonerror="true" resultproperty="appState">
@@ -71,6 +70,9 @@
 							</if>		
 						</target>
 						<!-- End -->
+						<var name="failedTestList" value="${failedTestList}'@{packageName}', " />
+						<property name="testFail" refid="exception_ref" />
+
 					</catch>
 				</trycatch>
 			</sequential>
