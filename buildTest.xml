@@ -47,7 +47,8 @@
 						<echo message="JUnit test for package '@{testProject}' failed" />
 						<var name="failedTestList" value="${failedTestList}'@{packageName}', " />
 						<property name="testFail" refid="exception_ref" />
-
+						<!--<antcall target="triggerRollback"/>-->
+						<fail message="One of the testcase failed" />
 					</catch>
 				</trycatch>
 			</sequential>
@@ -137,6 +138,50 @@
 		<fail if="test:failure">Unit test failure</fail>
 	</target>
 
+	<!-- determine which PA and Deployer executables are used - different for Windows and Unix -->
+	<condition property="isWindows">
+		<os family="windows" />
+	</condition>
+
+	<condition property="isUnix">
+		<os family="unix" />
+	</condition>
+
+	<target name="initPAandDeployerWindows" if="isWindows">
+		<property name="deployerExecutable" value="Deployer.bat" />
+		<property name="deployerAutomatorExecutable" value="projectautomator.bat" />
+	</target>
+
+	<target name="initPAandDeployerUnix" if="isUnix">
+		<property name="deployerExecutable" value="Deployer.sh" />
+		<property name="deployerAutomatorExecutable" value="projectautomatorUnix.sh" />
+	</target>
+
+	<!--  Trigger Rollback -->
+	<target name="triggerRollback" depends="initPAandDeployerWindows,initPAandDeployerUnix">
+		<exec executable="${deployerInstallationPath}/${deployerExecutable}" dir="${deployerInstallationPath}" failonerror="true" resultproperty="appState">
+			<arg value="--rollback"/>
+			<arg line="-dc myDeployment_${buildNumber}"/>
+			<arg line="-project ${projectName}"/>
+			<arg line="-host ${deployerHost}"/>
+			<arg line="-port ${deployerPort}"/>
+			<arg line="-user ${deployerUsername}"/>
+			<arg line="-pwd ${deployerPassword}"/>
+			<!--
+				<arg value="-force"/>
+			-->
+		</exec>
+		
+		<if>			
+		<equals arg1="${appState}" arg2="0" trim="true"/>			
+			<then>
+				<echo message="Rollback successfully executed."/>
+			</then>
+			<else>			    				
+				<fail message="Rollback failed."/>
+			</else>
+		</if>		
+	</target>	
 
 
 
