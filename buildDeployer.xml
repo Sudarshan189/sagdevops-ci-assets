@@ -20,7 +20,7 @@
 	<!-- XSLT for the Deployer Project Specification - adding Repository and Project Sections -->
 	<property name="initialXSLT" value="resources/setUpInitial.xslt"/>
 	
-	<target name="deployWM" description="main deploy task" depends="startDeployment, initPAandDeployerWindows, initPAandDeployerUnix, createDeployerSpec,execProjectAutomator,triggerSimulation,triggerDeploy">
+	<target name="deployWM" description="main deploy task" depends="startDeployment, initPAandDeployerWindows, initPAandDeployerUnix, createDeployerSpec,execProjectAutomator,triggerDeploy">
 	</target>
 
 	<target name="startDeployment">		
@@ -67,6 +67,8 @@
 			<param name="deployerPort" expression="${deployerPort}" />
 			<param name="deployerUsername" expression="${deployerUsername}" />
 			<param name="deployerPassword" expression="${deployerPassword}" />
+
+
 			
 			<!--target server props -->
 			<param name="testServer" expression="${testServer}" />
@@ -79,7 +81,8 @@
 			<param name="repoName" expression="${repositoryName}" />
 			<param name="repoPath" expression="${buildOutputDir}" />
 			<param name="projectName" expression="${projectName}" />
-			<param name="buildNumber" expression="${buildNumber}" />				
+			<param name="buildNumber" expression="${buildNumber}" />	
+			<param name="ignoreDependency" expression="${ignoreDependency}" />			
 		</xslt>				
 	</target>
 	
@@ -109,6 +112,7 @@
 
 	<!--  Trigger Deplyment -->
 	<target name="triggerDeploy">
+		<echo message="Triggering the deloy"/>
 		<exec executable="${deployerInstallationPath}/${deployerExecutable}" dir="${deployerInstallationPath}" failonerror="true" resultproperty="appState">
 			<arg value="--deploy"/>
 			<arg line="-dc myDeployment_${buildNumber}"/>
@@ -117,10 +121,7 @@
 			<arg line="-port ${deployerPort}"/>
 			<arg line="-user ${deployerUsername}"/>
 			<arg line="-pwd ${deployerPassword}"/>
-			<arg line="-checkpoint true"/>
-			<!--
-				<arg value="-force"/>
-			-->
+			<arg value="-force"/>
 		</exec>
 		
 		<if>			

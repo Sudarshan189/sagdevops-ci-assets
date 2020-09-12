@@ -37,6 +37,7 @@
 	<xsl:param name="repoPath"/>
 	<xsl:param name="projectName"/>
 	<xsl:param name="buildNumber"/>
+	<xsl:param name="ignoreDependency"/>
 		
 	<xsl:template match="@*|node()">
 		<xsl:copy>
@@ -90,8 +91,9 @@
 		<Projects>
 			<xsl:apply-templates select="@* | *" />
 			
-			<Project description="" ignoreMissingDependencies="false" overwrite="false" type="Repository">
-			<xsl:attribute name="name"><xsl:value-of select="$projectName"/></xsl:attribute>			
+			<Project description="" overwrite="true" type="Repository">
+			<xsl:attribute name="name"><xsl:value-of select="$projectName"/></xsl:attribute>
+			<xsl:attribute name="ignoreMissingDependencies"><xsl:value-of select="$ignoreDependency"/></xsl:attribute>			
 				<!-- name="myDeploymentSet" -->
 				<DeploymentSet autoResolve="full" description="myDeploymentSet">
 				<xsl:attribute name="srcAlias"><xsl:value-of select="$repoName"/></xsl:attribute>

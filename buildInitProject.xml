@@ -54,6 +54,10 @@
 
 	
 	<!-- optional properties -->
+	<target name="initIgnoreDependency" unless="ignoreDependency">
+		<property name="ignoreDependency" value="false"/>
+	</target>
+
 	<target name="initISProjectsDir" unless="isProjectsDir">
 		<property name="isProjectsDir" value=""/>
 	</target>
@@ -95,7 +99,7 @@
 	<target name="initMandatoryProperties" depends="initProjcetName,initBuildOutputDir,initRepositoryName,initDeployerProjectDefinition">
 	</target>
 	
-	<target name="initOptionalProperties" depends="initISProjectsDir,initISConfigDir,initBPMProjectsDir,initMWSProjectsDir,initRulesProjectsDir,initUMProjectDir,initTestPackageNamePattern,initJenkinsReportDir">
+	<target name="initOptionalProperties" depends="initISProjectsDir,initISConfigDir,initBPMProjectsDir,initMWSProjectsDir,initRulesProjectsDir,initUMProjectDir,initTestPackageNamePattern,initJenkinsReportDir,initIgnoreDependency">
 	</target>
 		
 	<target name="initProject" depends="initSystemProperties,initMandatoryProperties,initOptionalProperties" description="init properties needed for the project">
