@@ -91,11 +91,13 @@
 		<Projects>
 			<xsl:apply-templates select="@* | *" />
 			
-			<Project description="" overwrite="true" type="Repository">
+			<Project description="dfdf sdfds" overwrite="true" type="Repository">
 			<xsl:attribute name="name"><xsl:value-of select="$projectName"/></xsl:attribute>
-			<xsl:attribute name="ignoreMissingDependencies"><xsl:value-of select="$ignoreDependency"/></xsl:attribute>			
+			
+			<xsl:attribute name="ignoreMissingDependencies"><xsl:value-of select="$ignoreDependency"/></xsl:attribute>
+					
 				<!-- name="myDeploymentSet" -->
-				<DeploymentSet autoResolve="full" description="myDeploymentSet">
+				<DeploymentSet autoResolve="partial" description="myDeploymentSet">
 				<xsl:attribute name="srcAlias"><xsl:value-of select="$repoName"/></xsl:attribute>
 				<xsl:attribute name="name">myDeploymentSet_<xsl:value-of select="$buildNumber"/></xsl:attribute>
 
